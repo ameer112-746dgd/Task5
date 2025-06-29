@@ -3,20 +3,34 @@
 import { useState } from 'react';
 import { useFormState } from './context/FormContext';
 import { Button } from './ui/Button';
-import { Home, Globe, HandHeart, Accessibility } from 'lucide-react';
+import { Home, Globe, HandHeart, Accessibility, LucideIcon } from 'lucide-react';
 
-const donationOptions = [
+type DonationName = 'Shelter Foundation' | 'Global Outreach' | 'Community Support' | 'Accessibility Fund';
+
+interface DonationOption {
+  name: DonationName;
+  icon: LucideIcon;
+  label: string;
+}
+
+const donationOptions: DonationOption[] = [
   { name: 'Shelter Foundation', icon: Home, label: 'Foundation' },
   { name: 'Global Outreach', icon: Globe, label: 'Foundation' },
   { name: 'Community Support', icon: HandHeart, label: 'Foundation' },
   { name: 'Accessibility Fund', icon: Accessibility, label: 'Foundation' },
 ];
 
+interface OptionCardProps {
+  option: DonationOption;
+  onSelect: (name: DonationName) => void;
+}
+
 export default function Step5Donation() {
   const { prevStep, updateFormData, formData } = useFormState();
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleSelect = (donationName: any) => {
+  const handleSelect = (
+    donationName: DonationName
+  ) => {
     updateFormData({ donation: donationName });
     console.log('FINAL FORM SUBMITTED:', { ...formData, donation: donationName });
     setIsSubmitted(true);
@@ -31,8 +45,11 @@ export default function Step5Donation() {
     );
   }
 
-  const OptionCard = ({ option, onSelect }: any) => (
-    <div onClick={() => onSelect(option.name)} className="bg-[#2a314b] p-6 rounded-lg cursor-pointer transition-all duration-300 flex flex-col items-center justify-center space-y-3 border-2 border-transparent hover:border-[#00BCD4] group">
+  const OptionCard = ({ option, onSelect }: OptionCardProps) => (
+    <div 
+      onClick={() => onSelect(option.name)} 
+      className="bg-[#2a314b] p-6 rounded-lg cursor-pointer transition-all duration-300 flex flex-col items-center justify-center space-y-3 border-2 border-transparent hover:border-[#00BCD4] group"
+    >
       <option.icon className="w-10 h-10 text-gray-400 group-hover:text-[#00BCD4] transition-colors" />
       <span className="font-semibold text-lg text-gray-300">{option.label}</span>
     </div>
@@ -42,7 +59,9 @@ export default function Step5Donation() {
     <div className="text-center">
       <h2 className="text-2xl font-semibold mb-8">Who do you want to help?</h2>
       <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto">
-        {donationOptions.map((option) => (<OptionCard key={option.name} option={option} onSelect={handleSelect} />))}
+        {donationOptions.map((option) => (
+          <OptionCard key={option.name} option={option} onSelect={handleSelect} />
+        ))}
       </div>
       <div className="flex justify-center mt-10">
         <Button variant="secondary" onClick={prevStep}>Before</Button>

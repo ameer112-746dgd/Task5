@@ -3,9 +3,14 @@
 import { useState } from 'react';
 import { useFormState } from './context/FormContext';
 import { Button } from './ui/Button';
-import { Crown, User } from 'lucide-react';
+import { Crown, User, LucideIcon } from 'lucide-react';
 
 type TicketType = 'Business' | 'Economy';
+
+interface OptionCardProps {
+  type: TicketType;
+  icon: LucideIcon;
+}
 
 export default function Step2TicketType() {
   const { nextStep, prevStep, updateFormData, formData } = useFormState();
@@ -20,8 +25,15 @@ export default function Step2TicketType() {
     }
   };
 
-  const OptionCard = ({ type, icon: Icon }: any) => (
-    <div onClick={() => setSelectedType(type)} className={`p-6 border-2 rounded-lg cursor-pointer transition-all duration-300 flex flex-col items-center justify-center space-y-3 ${selectedType === type ? 'border-[#00BCD4] bg-[#00bcd4]/10' : 'border-gray-600 hover:border-[#00BCD4]'}`}>
+  const OptionCard = ({ type, icon: Icon }: OptionCardProps) => (
+    <div 
+      onClick={() => setSelectedType(type)} 
+      className={`p-6 border-2 rounded-lg cursor-pointer transition-all duration-300 flex flex-col items-center justify-center space-y-3 ${
+        selectedType === type 
+          ? 'border-[#00BCD4] bg-[#00bcd4]/10' 
+          : 'border-gray-600 hover:border-[#00BCD4]'
+      }`}
+    >
       <Icon className={`w-10 h-10 ${selectedType === type ? 'text-[#00BCD4]' : 'text-gray-400'}`} />
       <span className="font-semibold text-lg">{type}</span>
     </div>
